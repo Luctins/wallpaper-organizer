@@ -11,31 +11,35 @@ WALLPAPER_PATH:="/home/luctins/Pictures/mega-images/Wallpapers"
 INPUT="./input"
 OUTPUT="./output"
 
-#The categories are defined by the folder names, so to create a new category you
-# only need to create a new folder
+# The categories are defined by the folder names, so to create a new category you
+# only need to create a new folder inside $(INPUT)
 CATEGORIES:= $(shell cd $(INPUT) && ls -d */ | tr -d "/")
 
-#Os efeitos são gerados utilizando imagemagick
+# The effects are generated with Imagemagick (currently Unimplemented)
 EFFECTS:=spread paint
 
 #--------------------------------------------------------------------------------
 # Targets
 #--------------------------------------------------------------------------------
 
-.PHONY: $(CATEGORIES) rename all-effects help clean clean-all debug $(EFFECTS)
+.PHONY: $(CATEGORIES) rename all-effects help clean-input clean-output clean debug $(EFFECTS)
 
 help:
-	@echo "first run sort, to sort by categories, then apply one or more effects"
-	@echo "and then run move-result to move the output to the wallpaper folder"
+	@echo "first run init-folders, then run sort, to sort by the created categories, and then"
+	@echo "apply one or more effects and then run move-result to move then"
+	@echo "output to the wallpaper folder"
 
 debug:
 	@echo "Categories: $(CATEGORIES)"
 	@echo "Targets: $(TARGET_FILES)" | column
-	@echo "$(TARGET_PAINT)"
+#	@echo "$(TARGET_PAINT)"
 #	@echo "All targets: $(TARGET_FILES)" | column
 #	@echo "TARGET_BLUR: $(TARGET_blur)" | column
 #	@echo "TARGET_PAINT: $(TARGET_paint)" | column
 #	@echo "NAME_FMT=$(NAME_FMT)"
+
+init-folders:
+
 
 move-result:
 	@echo "Moving"
@@ -43,16 +47,18 @@ move-result:
 	-mv -v ./paint-output/* ./output/
 	-mv -v ./output/* ${WALLPAPER_PATH}
 
-#clean-output:
-#	-rm -rf ./output/*
+clean-output:
+	-rm -rf ./output/*
 #	-rm -rf ./blur-output/*
 #	-rm -rf ./paint-output/*
 
-clean:
-	find $(INPUT) -name '*.*' -print -exec rm {} \;
+clean: clean-input clean-output
+
+clean-input:
+	find $(INPUT) -type f -regex ".*\.\(png\|jpg\)" -depth 1 -P -print -exec rm {} \;
 
 #rename depends on each category, so each is built when rename is called
-sort: ${CATEGORIES}
+sort: ${CATEGORIES} 
 ${CATEGORIES}:
 	./rename-wallpaper.sh "$@" "$(INPUT)" "$(OUTPUT)" "$(WALLPAPER_PATH)"
 
