@@ -7,5 +7,5 @@ to sort your wallpapers, create folders into your input folder, each folder defi
 
 The program generates non conflicting filenames based on the defined categories (e.g. `photo-7k2DbEpw1i.png**) and checks before moving it into your wallpaper directory.
 
-##**TODO**
+## **TODO**
 * Add config file instead of editing the script
