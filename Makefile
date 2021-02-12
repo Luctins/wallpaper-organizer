@@ -1,22 +1,27 @@
 # @author Lucas Martins Mendes
 # @date dom mar 29 21:37:37 -03 2020
 # This makefile is used to "automagically" keep my wallpapers organized.
-# numbering and converting them.
 
 SHELL:=/bin/bash
 
-#Paths
+#-------------------------------------------------------------------------------
+# Settings
+
 WALLPAPER_PATH:=/home/luctins/Pictures/mega-images/Wallpapers
+TRASH_D:=/home/luctins/.local/share/Trash/
 
-INPUT="input"
-OUTPUT="output"
+INPUT:=input
+OUTPUT:=output
 
-# The categories are defined by the folder names, so to create a new category you
-# only need to create a new folder inside $(INPUT)
-#CATEGORIES:= $(shell cd $(INPUT) && ls -d */ | tr -d "/")
+#-------------------------------------------------------------------------------
+# The resulting file names, or "categories" are defined by the folder names, so
+# to create a new category you only need to create a new folder inside $(INPUT)
 
-INPUT_FILES:= $(shell find $(INPUT) -type f -regex ".*\.\(png\|jpg\|webp\)")
+#regex for input file types
+INPUT_F_TYPES:=jpg\|png\|jpeg\|webp
+
 OUTPUT_FILES:=$(shell ls $(OUTPUT))
+INPUT_FILES:= $(shell find $(INPUT) -type f -regex ".*\.\(${INPUT_F_TYPES}\)")
 
 # The effects are generated with Imagemagick (currently Unimplemented)
 EFFECTS:=spread paint blur
@@ -24,6 +29,7 @@ EFFECTS:=spread paint blur
 #--------------------------------------------------------------------------------
 # Targets
 #--------------------------------------------------------------------------------
+
 
 .PHONY: help init-folders clean-input clean-output clean debug $(EFFECTS) $(INPUT_FILES) $(OUTPUT_FILES)
 
@@ -59,7 +65,7 @@ $(OUTPUT_FILES):
 #	-mv -v ./paint-output/* ./output/
 #	-mv -v ./output/* ${WALLPAPER_PATH}
 
-# --------------------------------------
+#-----------------------------------------------------------
 # Clean
 
 clean: clean-input clean-output
@@ -70,4 +76,4 @@ clean-output:
 #	-rm -rf ./paint-output/*
 
 clean-input:
-	find $(INPUT) -type f -regex ".*\.\(png\|jpg\|webp\)" -P -print -exec rm {} \;
+	find $(INPUT) -type f -regex ".*\.\(${INPUT_F_TYPES}\)" -exec touch {} \; -exec mv -v {} ${TRASH_D} \;
