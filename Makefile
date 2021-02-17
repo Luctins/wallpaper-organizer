@@ -18,7 +18,7 @@ OUTPUT:=output
 # to create a new category you only need to create a new folder inside $(INPUT)
 
 #regex for input file types
-INPUT_F_TYPES:=jpg\|png\|jpeg\|webp
+INPUT_F_TYPES:=jpg\|png\|jpeg\|webp\|bmp
 
 OUTPUT_FILES:=$(shell ls $(OUTPUT))
 INPUT_FILES:= $(shell find $(INPUT) -type f -regex ".*\.\(${INPUT_F_TYPES}\)")
