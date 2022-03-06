@@ -7,7 +7,7 @@ SHELL:=/bin/bash
 #-------------------------------------------------------------------------------
 # Settings
 
-WALLPAPER_PATH:=/home/luctins/Pictures/mega-images/Wallpapers
+WALLPAPER_PATH:=/home/luctins/MEGA/Pictures/Wallpapers
 TRASH_D:=/home/luctins/.local/share/Trash/
 
 INPUT:=input
@@ -56,7 +56,7 @@ init-folders:
 sort: $(INPUT_FILES)
 	@echo sorting done
 $(INPUT_FILES):
-	convert -verbose "$@" "$(OUTPUT)/$(patsubst input/%/,%, $(dir $@))$(patsubst .%,_%,$(suffix $(shell mktemp --dry-run))).png"
+	convert -verbose "$@" "$(OUTPUT)/$(patsubst input/%/,%, $(dir $@))$(patsubst .%,-%,$(suffix $(shell mktemp --dry-run))).png"
 
 move-result: $(OUTPUT_FILES)
 $(OUTPUT_FILES):
