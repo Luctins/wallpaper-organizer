@@ -7,7 +7,7 @@ SHELL:=/bin/bash
 #-------------------------------------------------------------------------------
 # Settings
 
-WALLPAPER_PATH:=/home/luctins/MEGA/Pictures/Wallpapers
+WALLPAPER_PATH:=/home/luctins/Pictures/mega-Wallpapers
 TRASH_D:=/home/luctins/.local/share/Trash/
 
 INPUT:=input
@@ -31,7 +31,9 @@ EFFECTS:=spread paint blur
 #--------------------------------------------------------------------------------
 
 
-.PHONY: help init-folders clean-input clean-output clean debug $(EFFECTS) $(INPUT_FILES) $(OUTPUT_FILES)
+.PHONY: all help init-folders clean-input clean-output clean debug $(EFFECTS) $(INPUT_FILES) $(OUTPUT_FILES)
+
+all: sort move-result clean
 
 help:
 	@echo "first run init-folders, then run sort, to sort by the created categories, and then"
@@ -55,15 +57,13 @@ init-folders:
 
 sort: $(INPUT_FILES)
 	@echo sorting done
+
 $(INPUT_FILES):
 	convert -verbose "$@" "$(OUTPUT)/$(patsubst input/%/,%, $(dir $@))$(patsubst .%,-%,$(suffix $(shell mktemp --dry-run))).png"
 
 move-result: $(OUTPUT_FILES)
 $(OUTPUT_FILES):
 	@if [[ -f "$(WALLPAPER_PATH)/$@" ]]; then echo "file collision on $@, abort"; else mv -v "$(OUTPUT)/$@" "$(WALLPAPER_PATH)/$@"; fi
-#	-mv -v ./blur-output/* ./output/
-#	-mv -v ./paint-output/* ./output/
-#	-mv -v ./output/* ${WALLPAPER_PATH}
 
 #-----------------------------------------------------------
 # Clean
@@ -71,9 +71,7 @@ $(OUTPUT_FILES):
 clean: clean-input clean-output
 
 clean-output:
-	-rm -rfv ./output/*
-#	-rm -rf ./blur-output/*
-#	-rm -rf ./paint-output/*
+	rmtrash ./output/*
 
 clean-input:
-	find $(INPUT) -type f -regex ".*\.\(${INPUT_F_TYPES}\)" -exec touch {} \; -exec mv -v {} ${TRASH_D} \;
+	find $(INPUT) -type f -regex ".*\.\(${INPUT_F_TYPES}\)" -exec touch {} \; -exec rmtrash {} \;
