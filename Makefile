@@ -71,7 +71,7 @@ $(OUTPUT_FILES):
 clean: clean-input clean-output
 
 clean-output:
-	rmtrash ./output/*
+	trash-put -v $(shell ls $(OUTPUT))
 
 clean-input:
-	find $(INPUT) -type f -regex ".*\.\(${INPUT_F_TYPES}\)" -exec touch {} \; -exec rmtrash {} \;
+	find $(INPUT) -type f -regex ".*\.\(${INPUT_F_TYPES}\)" -exec touch {} \; -exec trash-put -v {} \;
