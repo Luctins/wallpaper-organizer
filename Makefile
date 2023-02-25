@@ -7,7 +7,7 @@ SHELL:=/bin/bash
 #-------------------------------------------------------------------------------
 # Settings
 
-WALLPAPER_PATH:=/home/luctins/Pictures/mega-Wallpapers
+WALLPAPER_PATH:=/home/luctins/Pictures/Wallpaper-vault
 TRASH_D:=/home/luctins/.local/share/Trash/
 
 INPUT:=input
@@ -30,10 +30,11 @@ EFFECTS:=spread paint blur
 # Targets
 #--------------------------------------------------------------------------------
 
-
-.PHONY: all help init-folders clean-input clean-output clean debug $(EFFECTS) $(INPUT_FILES) $(OUTPUT_FILES)
+.PHONY: all help init-folders clean-input clean-output clean debug __pre-sort-hook
+.PHONY: $(EFFECTS) $(INPUT_FILES) $(OUTPUT_FILES)
 
 all: sort move-result clean
+
 
 help:
 	@echo "first run init-folders, then run sort, to sort by the created categories, and then"
@@ -52,11 +53,14 @@ debug:
 #	@echo "NAME_FMT=$(NAME_FMT)"
 
 init-folders:
-	mkdir $(INPUT)
-	mkdir $(OUTPUT)
+	-mkdir $(INPUT)
+	-mkdir $(OUTPUT)
 
-sort: $(INPUT_FILES)
+sort: __pre-sort-hook $(INPUT_FILES)
 	@echo sorting done
+
+__pre-sort-hook:
+	-rename -a ' ' '_' input/*
 
 $(INPUT_FILES):
 	convert -verbose "$@" "$(OUTPUT)/$(patsubst input/%/,%, $(dir $@))$(patsubst .%,-%,$(suffix $(shell mktemp --dry-run))).png"
@@ -71,7 +75,7 @@ $(OUTPUT_FILES):
 clean: clean-input clean-output
 
 clean-output:
-	trash-put -v $(shell ls $(OUTPUT))
+	@if [ ! -z "${OUTPUT_FILES}" ]; then trash-put -v $(OUTPUT_FILES); else echo "No output files" ; fi
 
 clean-input:
 	find $(INPUT) -type f -regex ".*\.\(${INPUT_F_TYPES}\)" -exec touch {} \; -exec trash-put -v {} \;
