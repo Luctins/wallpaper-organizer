@@ -1,0 +1,13 @@
+# -*- mode:makefile -*-
+
+#-------------------------------------------------------------------------------
+# Settings
+
+# This works even with symlinks
+WALLPAPER_PATH:=/home/username/Pictures/Wallpapers
+
+# TODO: implement option to use MV instead
+# this is not used if the command is trash-put or rm for example
+TRASH_D:=/home/luctins/.local/share/Trash/
+
+RM_CMD=trash-put

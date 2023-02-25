@@ -1,0 +1,18 @@
+:PROPERTIES:
+#+TITLE: Readme
+#+AUTHOR: luctins
+#+DATE: 2023-02-25 16:40:09
+:END:
+
+* Wallpaper Organizer
+A simple makefile based tool for sorting and formatting images/wallpapers into folder defined categories
+
+** How to Use
+Please set the input varibles on the beggining of the Makefile before running make.
+
+to sort your wallpapers, create folders into your input folder, each folder defines a new category.
+
+The program generates non conflicting filenames based on the defined categories (e.g. =photo-7k2DbEpw1i.png=) and checks before moving it into your (configured) wallpaper directory.
+
+** Contributing
+Feel free to open issues for problems you find or pull requests.

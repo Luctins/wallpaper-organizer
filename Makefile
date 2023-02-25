@@ -4,11 +4,11 @@
 
 SHELL:=/bin/bash
 
-#-------------------------------------------------------------------------------
-# Settings
+include Settings.inc
 
-WALLPAPER_PATH:=/home/luctins/Pictures/Wallpaper-vault
-TRASH_D:=/home/luctins/.local/share/Trash/
+CFG_VARS := WALLPAPER_PATH RM_CMD TRASH_D
+
+$(foreach var, $(CFG_VARS), $(if $($(var)),,$(error $(var) not defined)))
 
 INPUT:=input
 OUTPUT:=output
@@ -27,10 +27,28 @@ INPUT_FILES:= $(shell find $(INPUT) -type f -regex ".*\.\(${INPUT_F_TYPES}\)")
 EFFECTS:=spread paint blur
 
 #--------------------------------------------------------------------------------
+# Debug
+#--------------------------------------------------------------------------------
+
+debug:
+	@echo "Categories: $(CATEGORIES)"
+	@echo "Input files: $(INPUT_FILES)" | column
+	@echo "Output files: $(OUTPUT_FILES)" | column
+	@echo "cfg: dest: $(WALLPAPER_PATH), rm: $(RM_CMD), trashd: $(TRASH_D)"
+#	@echo "Targets: $(TARGET_FILES)" | column
+#	@echo "$(TARGET_PAINT)"
+#	@echo "All targets: $(TARGET_FILES)" | column
+#	@echo "TARGET_BLUR: $(TARGET_blur)" | column
+#	@echo "TARGET_PAINT: $(TARGET_paint)" | column
+#	@echo "NAME_FMT=$(NAME_FMT)"
+
+
+#--------------------------------------------------------------------------------
 # Targets
 #--------------------------------------------------------------------------------
 
 .PHONY: all help init-folders clean-input clean-output clean debug __pre-sort-hook
+.PHONY: debug-eval
 .PHONY: $(EFFECTS) $(INPUT_FILES) $(OUTPUT_FILES)
 
 all: sort move-result clean
@@ -41,16 +59,6 @@ help:
 	@echo "apply one or more effects and then run move-result to move the"
 	@echo "output to the wallpaper folder"
 
-debug:
-	@echo "Categories: $(CATEGORIES)"
-	@echo "Input files: $(INPUT_FILES)" | column
-	@echo "Output files: $(OUTPUT_FILES)" | column
-#	@echo "Targets: $(TARGET_FILES)" | column
-#	@echo "$(TARGET_PAINT)"
-#	@echo "All targets: $(TARGET_FILES)" | column
-#	@echo "TARGET_BLUR: $(TARGET_blur)" | column
-#	@echo "TARGET_PAINT: $(TARGET_paint)" | column
-#	@echo "NAME_FMT=$(NAME_FMT)"
 
 init-folders:
 	-mkdir $(INPUT)
