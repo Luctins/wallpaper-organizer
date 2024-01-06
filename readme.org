@@ -8,7 +8,9 @@
 A simple makefile based tool for sorting and formatting images/wallpapers into folder defined categories
 
 * How to Use
-Please set the input varibles on the configuration file and remove the =.sample= from the filename before running make.
+1) Set the input varibles on the configuration file and remove the =.sample= from the filename
+2) Run =make sort -j && make move-result && make clean= to run all steps in sequence
+   - Set the -j option if you want less threads to be used
 
 To sort your wallpapers, create folders into your input folder, each folder defines a new category.
 
