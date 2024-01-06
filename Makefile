@@ -68,10 +68,10 @@ sort: __pre-sort-hook $(INPUT_FILES)
 	@echo sorting done
 
 __pre-sort-hook:
-	-rename -a ' ' '_' input/*
+	-rename -a ' ' '_' input/* || true
 
 $(INPUT_FILES):
-	convert -verbose "$@" "$(OUTPUT)/$(patsubst input/%/,%, $(dir $@))$(patsubst .%,-%,$(suffix $(shell mktemp --dry-run))).png"
+	convert -verbose "$@" "$(OUTPUT)/$(patsubst input/%/,%, $(dir $@))__$(shell date +%y-%m-%d--%H-%M-%S)__$(patsubst .%,__%,$(suffix $(shell mktemp --dry-run))).png"
 
 move-result: $(OUTPUT_FILES)
 $(OUTPUT_FILES):
