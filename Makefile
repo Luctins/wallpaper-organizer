@@ -34,7 +34,7 @@ debug:
 	@echo "Categories: $(CATEGORIES)"
 	@echo "Input files: $(INPUT_FILES)" | column
 	@echo "Output files: $(OUTPUT_FILES)" | column
-	@echo "cfg: dest: $(WALLPAPER_PATH), rm: $(RM_CMD), trashd: $(TRASH_D)"
+	@echo -e "cfg: \n\tdest: $(WALLPAPER_PATH), rm: $(RM_CMD), trashd: $(TRASH_D)"
 #	@echo "Targets: $(TARGET_FILES)" | column
 #	@echo "$(TARGET_PAINT)"
 #	@echo "All targets: $(TARGET_FILES)" | column
